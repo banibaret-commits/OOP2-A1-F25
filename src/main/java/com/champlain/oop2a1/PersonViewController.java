@@ -42,14 +42,8 @@ public class PersonViewController {
      */
     @FXML
     protected void onSaveButtonClick() {
-        // Making sure there is a Person object to work with.
-        if (this.aPerson == null) {
-            this.aPerson = new Person();
-        }
         try {
-            this.aPerson.setName(aNameTextField.getText());
-            this.aPerson.setDOB(aDOBDatePicker.getValue());
-            this.aPerson.setEmailAddress(aEmailAddressTextField.getText());
+            this.aPerson = new Person(aNameTextField.getText(), aDOBDatePicker.getValue(), aEmailAddressTextField.getText());
         } catch (IllegalArgumentException e) {
             handleInputError(e);
             return;
@@ -67,11 +61,9 @@ public class PersonViewController {
      */
     @FXML
     protected void onLoadExampleButtonClick() {
-        this.aPerson = new Person();
+
         try {
-            this.aPerson.setName("John Doe");
-            this.aPerson.setDOB(LocalDate.of(2000, 1, 1));
-            this.aPerson.setEmailAddress("john@gmail.com");
+            this.aPerson = new Person("John Doe", LocalDate.of(2000, 1, 1), "john@gmail.com");
         } catch (IllegalArgumentException e) {
             handleInputError(e);
         }
@@ -88,15 +80,16 @@ public class PersonViewController {
     protected void onBuyPassButtonClick() {
         // Making sure there is a Person object to work with.
         if (this.aPerson == null) {
-            this.aPerson = new Person();
-        }
-
-        // Changing the value and displaying it.
-        boolean purchaseResult = this.aPerson.purchaseParkingPass();
-        this.displayPerson(this.aPerson);
-        if (!purchaseResult) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "This person already had a parking pass! Don't waste my money!");
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR, "No person has been saved yet.");
             errorAlert.showAndWait();
+        } else {
+            // Changing the value and displaying it.
+            boolean purchaseResult = this.aPerson.purchaseParkingPass();
+            this.displayPerson(this.aPerson);
+            if (!purchaseResult) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR, "This person already had a parking pass! Don't waste my money!");
+                errorAlert.showAndWait();
+            }
         }
     }
 
