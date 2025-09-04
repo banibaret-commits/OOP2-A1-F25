@@ -1,4 +1,4 @@
-module com.champlain.oop2lab1 {
+module com.champlain.oop2a1 {
     requires javafx.controls;
     requires javafx.fxml;
 

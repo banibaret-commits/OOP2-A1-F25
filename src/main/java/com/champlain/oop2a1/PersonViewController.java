@@ -2,22 +2,44 @@ package com.champlain.oop2a1;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
+import java.time.LocalDate;
+
+/**
+ * Controller class for handling user interactions in the Person View GUI.
+ * This class manages the input, display, and interaction logic for a {@link Person} object,
+ * including saving data, loading example data, and purchasing a parking pass.
+ */
 public class PersonViewController {
+    /** Label to display parking pass status. */
     @FXML
     private Label aParkingPassLabel;
+
+    /** Text field to input the person's name. */
     @FXML
     private TextField aNameTextField;
+
+    /** Date picker to input the person's date of birth. */
     @FXML
-    private TextField aPhoneNumberTextField;
+    private DatePicker aDOBDatePicker;
+
+    /** Text field to input the person's email address. */
     @FXML
     private TextField aEmailAddressTextField;
 
+    /** The person object being created or modified through the GUI. */
     private Person aPerson;
 
+    /**
+     * Called when the "Save" button is clicked.
+     * Validates and saves the entered person data into the {@link Person} object.
+     * If successful, displays a confirmation dialog.
+     * If validation fails, displays an error alert.
+     */
     @FXML
     protected void onSaveButtonClick() {
         // Making sure there is a Person object to work with.
@@ -26,24 +48,29 @@ public class PersonViewController {
         }
         try {
             this.aPerson.setName(aNameTextField.getText());
+            this.aPerson.setDOB(aDOBDatePicker.getValue());
             this.aPerson.setEmailAddress(aEmailAddressTextField.getText());
-            this.aPerson.setPhoneNumber(aPhoneNumberTextField.getText());
         } catch (IllegalArgumentException e) {
             handleInputError(e);
             return;
         }
 
         this.displayPerson(this.aPerson);
-        Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION, "Entered data saved successfully!");
+        Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION, this.aPerson.toString() + " saved successfully!");
         successAlert.showAndWait();
     }
 
+    /**
+     * Called when the "Load Example" button is clicked.
+     * Loads a sample {@link Person} with pre-defined values and displays it in the form.
+     * If setting sample data fails (which should not normally happen), shows an error.
+     */
     @FXML
     protected void onLoadExampleButtonClick() {
         this.aPerson = new Person();
         try {
             this.aPerson.setName("John Doe");
-            this.aPerson.setPhoneNumber("(819) 555-0123");
+            this.aPerson.setDOB(LocalDate.of(2000, 1, 1));
             this.aPerson.setEmailAddress("john@gmail.com");
         } catch (IllegalArgumentException e) {
             handleInputError(e);
@@ -52,6 +79,11 @@ public class PersonViewController {
         this.displayPerson(this.aPerson);
     }
 
+    /**
+     * Called when the "Buy Pass" button is clicked.
+     * Attempts to purchase a parking pass for the {@link Person}.
+     * If already owned, displays an error alert.
+     */
     @FXML
     protected void onBuyPassButtonClick() {
         // Making sure there is a Person object to work with.
@@ -60,7 +92,7 @@ public class PersonViewController {
         }
 
         // Changing the value and displaying it.
-        boolean purchaseResult = this.aPerson.PurchaseParkingPass();
+        boolean purchaseResult = this.aPerson.purchaseParkingPass();
         this.displayPerson(this.aPerson);
         if (!purchaseResult) {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR, "This person already had a parking pass! Don't waste my money!");
@@ -68,11 +100,17 @@ public class PersonViewController {
         }
     }
 
-    private void displayPerson(Person person) {
+    /**
+     * Updates the GUI form fields with the data from the given {@link Person} object.
+     * Also updates the parking pass label with appropriate message and color.
+     *
+     * @param pPerson The person object whose data is to be displayed.
+     */
+    private void displayPerson(Person pPerson) {
         aNameTextField.setText(aPerson.getName());
-        aPhoneNumberTextField.setText(aPerson.getPhoneNumber());
+        aDOBDatePicker.setValue(aPerson.getDOB());
         aEmailAddressTextField.setText(aPerson.getEmailAddress());
-        if (person.isPurchasedParkingPass()) {
+        if (pPerson.isPurchasedParkingPass()) {
             aParkingPassLabel.setText("This person has a parking pass!");
             aParkingPassLabel.setTextFill(Color.color(0, 1, 0));
         } else {
@@ -81,8 +119,13 @@ public class PersonViewController {
         }
     }
 
-    private void handleInputError(IllegalArgumentException e) {
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Entered data invalid: " + e.getMessage());
+    /**
+     * Displays an error alert dialog with a message derived from the given exception.
+     *
+     * @param pException The {@link IllegalArgumentException} that occurred due to invalid input.
+     */
+    private void handleInputError(IllegalArgumentException pException) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Entered data invalid: " + pException.getMessage());
         errorAlert.showAndWait();
     }
 }
