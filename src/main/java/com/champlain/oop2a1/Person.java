@@ -8,21 +8,40 @@ import java.util.regex.Pattern;
  */
 
  public class Person {
-     // A pattern for validating email addresses.
+
+    /**
+     * A pattern to check if an email address is valid.
+     */
      private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
 
-    // The full name of the person (first name + last name).
+    /**
+     * The person's full name.
+     */
      private final String aName;
 
-    // The date of birth of the person.
+    /**
+     * The person's date of birth.
+     */
      private final LocalDate aDOB;
 
-    // The email address of the person.
+    /**
+     * The person's email address.
+     */
      private final String aEmailAddress;
 
-    // True if a parking pass has been purchased, false otherwise.
+    /**
+     * True if the person has a parking pass, and false otherwise.
+     */
      private boolean aHasParkingPass;
 
+    /**
+     * Creates a new Person object.
+     *
+     * @param pName The person's name.
+     * @param pDOB The person's date of birth.
+     * @param pEmailAddress The person's email.
+     * @throws IllegalArgumentException if the name, date of birth, or email are invalid.
+     */
      public Person(String pName, LocalDate pDOB, String pEmailAddress) {
          if (pName == null || pName.trim().isEmpty()) {
              throw new IllegalArgumentException("Name cannot be null or empty.");
@@ -39,22 +58,47 @@ import java.util.regex.Pattern;
          this.aHasParkingPass = false;
      }
 
+    /**
+     * Gets the person's name.
+     *
+     * @return The name.
+     */
      public String getName() {
          return this.aName;
      }
 
+    /**
+     * Gets the person's date of birth.
+     *
+     * @return The date of birth.
+     */
      public LocalDate getDOB() {
          return this.aDOB;
      }
 
+    /**
+     * Gets the person's email address.
+     *
+     * @return The email address.
+     */
      public String getEmailAddress() {
          return this.aEmailAddress;
      }
 
+    /**
+     * Checks if the person has a parking pass.
+     *
+     * @return True if they have one, false otherwise.
+     */
      public boolean isPurchasedParkingPass() {
         return this.aHasParkingPass;
      }
 
+    /**
+     * Tries to get a parking pass for the person.
+     *
+     * @return True if it worked, false if they already have a pass.
+     * */
      public boolean purchaseParkingPass() {
          if (this.aHasParkingPass) {
              return false;
@@ -63,6 +107,11 @@ import java.util.regex.Pattern;
          return true;
      }
 
+    /**
+     * Gives a basic text summary of the person.
+     *
+     * @return A string with the person's info.
+     */
      @Override
      public String toString() {
          return "Name: " + this.aName + ", Local Date: " + this.aDOB + ", Email: " + this.aEmailAddress;
