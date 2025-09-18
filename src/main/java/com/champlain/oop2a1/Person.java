@@ -23,9 +23,9 @@ import java.util.regex.Pattern;
     // True if a parking pass has been purchased, false otherwise.
      private boolean aHasParkingPass;
 
-     public Person(String pFirstName, String pLastName, LocalDate pDOB, String pEmailAddress) {
-         if (pFirstName == null || pFirstName.trim().isEmpty()) {
-             throw new IllegalArgumentException("First name cannot be null or empty.");
+     public Person(String pName, LocalDate pDOB, String pEmailAddress) {
+         if (pName == null || pName.trim().isEmpty()) {
+             throw new IllegalArgumentException("Name cannot be null or empty.");
          }
          if (pDOB == null) {
              throw new IllegalArgumentException("Date of birth cannot be null.");
@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
          if (pEmailAddress == null || pEmailAddress.trim().isEmpty() || !EMAIL_PATTERN.matcher(pEmailAddress).matches()) {
              throw new IllegalArgumentException("Email address is invalid.");
          }
-         this.aName = pFirstName + " " + pLastName;
+         this.aName = pName;
          this.aDOB = pDOB;
          this.aEmailAddress = pEmailAddress;
          this.aHasParkingPass = false;
@@ -52,14 +52,14 @@ import java.util.regex.Pattern;
      }
 
      public boolean isPurchasedParkingPass() {
-         return this.aHasParkingPass = true;
+        return this.aHasParkingPass;
      }
 
      public boolean purchaseParkingPass() {
          if (this.aHasParkingPass) {
              return false;
          } else
-         this.aHasParkingPass = true;
+             this.aHasParkingPass = true;
          return true;
      }
 
